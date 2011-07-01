@@ -1,0 +1,15 @@
+inherit apache2
+
+
+HOMEPAGE="http://0pointer.de/lennart/projects/mod_dnssd/"
+SRC_URI="http://0pointer.de/lennart/projects/mod_dnssd/mod_dnssd-${PV}.tar.gz"
+
+DIFF_EXCLUDES=".libs *.la *.lo"
+
+CYGCONF_ARGS="--with-apxs=${APXS2%/*} --with-apachectl=/usr/sbin"
+
+src_install() {
+	cd ${S}/src
+	doapache2mod mod_dnssd.la
+	apache2_postinst
+}
