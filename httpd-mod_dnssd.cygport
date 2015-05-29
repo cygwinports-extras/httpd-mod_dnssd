@@ -25,10 +25,14 @@ src_install() {
 	cd ${S}/src
 	dohttpdmod mod_dnssd.la
 	httpd_loadmodules
-	cat >> ${D}${HTTPD_SYSCONFDIR}/*.conf <<_EOF
+
+	dodir ${HTTPD_SYSCONFDIR}
+	cat >> ${D}${HTTPD_SYSCONFDIR}/mod_dnnsd.conf <<_EOF
+<IfModule mod_dnssd.c>
 DNSSDEnable on
 #DNSSDAutoRegisterVHosts on
 #DNSSDAutoRegisterUserDir on
+</IfModule>
 _EOF
 	make_etc_defaults ${HTTPD_SYSCONFDIR}
 }
