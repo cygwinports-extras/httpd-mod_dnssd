@@ -1,0 +1,34 @@
+inherit httpd
+
+NAME="httpd-mod_dnssd"
+VERSION=0.6
+RELEASE=1
+CATEGORY="Web"
+SUMMARY="httpd DNS-SD publishing module"
+DESCRIPTION="mod_dnssd is an Apache HTTPD module which adds Zeroconf support
+via DNS-SD using Avahi."
+HOMEPAGE="http://0pointer.de/lennart/projects/mod_dnssd/"
+SRC_URI="http://0pointer.de/lennart/projects/mod_dnssd/mod_dnssd-${VERSION}.tar.gz"
+PATCH_URI="http://pkgs.fedoraproject.org/cgit/mod_dnssd.git/plain/mod_dnssd-0.6-httpd24.patch"
+
+DIFF_EXCLUDES=".libs *.la *.lo"
+
+CYGCONF_ARGS="--with-apxs=${HTTPD_APXS%/*} --with-apachectl=/usr/sbin"
+
+src_compile() {
+	cd ${B}
+	cygconf
+	cygmake
+}
+
+src_install() {
+	cd ${S}/src
+	dohttpdmod mod_dnssd.la
+	httpd_postinst
+	cat >> ${D}${HTTPD_SYSCONFDIR}/*.conf <<_EOF
+DNSSDEnable on
+#DNSSDAutoRegisterVHosts on
+#DNSSDAutoRegisterUserDir on
+_EOF
+	make_etc_defaults ${HTTPD_SYSCONFDIR}
+}
