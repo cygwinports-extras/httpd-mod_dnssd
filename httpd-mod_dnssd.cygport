@@ -2,7 +2,7 @@ inherit httpd
 
 NAME="httpd-mod_dnssd"
 VERSION=0.6
-RELEASE=1
+RELEASE=2
 CATEGORY="Web"
 SUMMARY="httpd DNS-SD publishing module"
 DESCRIPTION="mod_dnssd is an Apache HTTPD module which adds Zeroconf support
@@ -17,7 +17,7 @@ CYGCONF_ARGS="--with-apxs=${HTTPD_APXS%/*} --with-apachectl=/usr/sbin"
 
 src_compile() {
 	cd ${B}
-	cygconf
+	cygconf LIBS=-lmod_unixd
 	cygmake
 }
 
